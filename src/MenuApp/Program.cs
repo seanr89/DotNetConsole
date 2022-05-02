@@ -1,4 +1,6 @@
-﻿namespace MenuApp;
+﻿using Utilities;
+
+namespace MenuApp;
 
 class Program
 {
@@ -16,6 +18,49 @@ class Program
             new MenuOption("2. Clear Log", () => Console.Clear()),
             new MenuOption("9. Exit", () => Environment.Exit(0)),
         };
+
+        // Set the default index of the selected item to be the first
+            int index = 0;
+
+            // Write the menu out
+            WriteMenu(options, options[index]);
+
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(ConsoleHelpers.cancelHandler);
+
+            // Store key info in here
+            ConsoleKeyInfo keyinfo;
+            do
+            {
+                keyinfo = Console.ReadKey();
+
+                // Handle each key input (down arrow will write the menu again with a different selected item)
+                if (keyinfo.Key == ConsoleKey.DownArrow)
+                {
+                    if (index + 1 < options.Count)
+                    {
+                        index++;
+                        WriteMenu(options, options[index]);
+                    }
+                }
+                if (keyinfo.Key == ConsoleKey.UpArrow)
+                {
+                    if (index - 1 >= 0)
+                    {
+                        index--;
+                        WriteMenu(options, options[index]);
+                    }
+                }
+                // Handle different action for the option
+                if (keyinfo.Key == ConsoleKey.Enter)
+                {
+                    options[index].Operation.Invoke();
+                    index = 0;
+                }
+            }
+            while (keyinfo.Key != ConsoleKey.X);
+
+            Console.ReadKey();
+    }
 
         /// <summary>
         /// Supports drawing of the current menu selection option (>)
@@ -41,6 +86,4 @@ class Program
                 Console.WriteLine(option.Name);
             }
         }
-
-    }
 }
