@@ -63,7 +63,7 @@ public static class ConsoleHelpers
         var isCtrlC = e.SpecialKey == ConsoleSpecialKey.ControlC;
         if (isCtrlC)
         {
-            string confirmation = null;
+            string confirmation = "";
             Console.Write("Are you sure you want to cancel the task? (y/n)");
             confirmation = Console.ReadLine() ?? "y";
 
